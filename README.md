@@ -1,35 +1,101 @@
 <!--
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║  🇨🇳 中文说明 (Chinese)  |  🇬🇧 English                                        ║
-║  Language toggle: Use the tabs below / 使用下方标签切换                       ║
+║  Language / 语言 / Idioma / भाषा / اللغة / 言語                            ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  🇬🇧 English  |  🇨🇳 中文  |  🇪🇸 Español  |  🇮🇳 हिन्दी  |  🇸🇦 العربية  |  🇯🇵 日本語  ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 -->
 
 <!-- tabs:start -->
 
-## 🇨🇳 中文说明
+## 🇬🇧 English
 
-### 这是什么？
+### What is cursor2api?
 
-**cursor2api** 是一个代理服务，将 Cursor IDE 的免费 AI 对话转换为标准 Anthropic Messages API / OpenAI Chat Completions API 格式。
+**cursor2api** is a proxy service that converts Cursor IDE's free AI conversations into standard Anthropic Messages API / OpenAI Chat Completions API format.
 
-配合 [OpenClaw](https://github.com/openclaw/openclaw) 或 Claude Code 使用，让你可以用 Cursor 订阅的 Claude 模型（如 Claude Sonnet 4）。
+Use it with [OpenClaw](https://github.com/openclaw/openclaw) or Claude Code to access Cursor's Claude models (e.g., Claude Sonnet 4) through your existing API-compatible tools.
 
-### 主要特性
+### Features
+
+- 🌐 **Standard API Formats** — Anthropic Messages API + OpenAI Chat Completions
+- 🐳 **Docker Deployment** — One-command startup
+- 🔄 **Token Auto-Refresh** — Scripts to simplify token renewal
+- 📚 **Multi-language Docs** — English, Chinese, Spanish, Hindi, Arabic, Japanese
+
+### Quick Start
+
+#### 1. Get Your Token
+
+1. Open [Cursor IDE](https://cursor.com) and log in
+2. Press `Cmd+Option+I` → **Application** → **Cookies** → `https://cursor.com`
+3. Copy `WorkosCursorSessionToken` value
+
+#### 2. Start Service
+
+```bash
+docker run -d \
+  --name cursor-api \
+  -p 3010:3000 \
+  -e WORKOS_CURSOR_SESSION_TOKEN=your_token \
+  waitkafuka/cursor-api:latest
+```
+
+#### 3. Configure
+
+```bash
+export ANTHROPIC_BASE_URL="http://localhost:3010/v1"
+export ANTHROPIC_API_KEY="your_token"
+export ANTHROPIC_DEFAULT_SONNET_MODEL="claude-sonnet-4-6"
+source ~/.zshrc && openclaw gateway restart
+```
+
+### Install via OpenClaw
+
+```bash
+clawhub install cursor2api
+```
+
+### Documentation
+
+| File | Description |
+|------|-------------|
+| [SKILL.md](SKILL.md) | OpenClaw Skill entry point |
+| [references/installation.md](references/installation.md) | Full installation guide |
+| [references/token.md](references/token.md) | Token acquisition & refresh |
+| [references/configuration.md](references/configuration.md) | Environment configuration |
+| [references/quick-reference.md](references/quick-reference.md) | One-page cheat sheet |
+
+### ⚠️ Notes
+
+- **ToS Risk**: Third-party proxies may violate Cursor's Terms of Service
+- **Token Expiry**: Session tokens expire; refresh when needed
+- **API Stability**: Cursor's internal API may change
+
+---
+
+## 🇨🇳 中文
+
+### cursor2api 是什么？
+
+**cursor2api** 是一个代理服务，将 Cursor IDE 的 AI 对话转换为标准 Anthropic Messages API / OpenAI Chat Completions API 格式。
+
+配合 [OpenClaw](https://github.com/openclaw/openclaw) 或 Claude Code 使用，通过 API 兼容工具访问 Cursor 的 Claude 模型（如 Claude Sonnet 4）。
+
+### 特性
 
 - 🌐 **标准 API 格式** — 支持 Anthropic Messages API 和 OpenAI Chat Completions
-- 🐳 **Docker 部署** — 一键启动，开箱即用
-- 🔄 **Token 自动续期** — 提供脚本简化 Token 刷新流程
-- 📝 **双语文档** — 英文为主，支持中文切换
+- 🐳 **Docker 部署** — 一键启动
+- 🔄 **Token 自动续期** — 脚本简化刷新流程
+- 📚 **多语言文档** — 英文、中文、西班牙语、印地语、阿拉伯语、日语
 
 ### 快速开始
 
 #### 1. 获取 Token
 
 1. 打开 [Cursor IDE](https://cursor.com) 并登录
-2. 按 `Cmd+Option+I` 打开开发者工具
-3. 切换到 **Application** → **Cookies** → `https://cursor.com`
-4. 复制 `WorkosCursorSessionToken` 的值
+2. 按 `Cmd+Option+I` → **Application** → **Cookies** → `https://cursor.com`
+3. 复制 `WorkosCursorSessionToken` 的值
 
 #### 2. 启动服务
 
@@ -41,68 +107,113 @@ docker run -d \
   waitkafuka/cursor-api:latest
 ```
 
-#### 3. 配置环境变量
+#### 3. 配置环境
 
 ```bash
-# 添加到 ~/.zshrc
 export ANTHROPIC_BASE_URL="http://localhost:3010/v1"
 export ANTHROPIC_API_KEY="你的Token"
 export ANTHROPIC_DEFAULT_SONNET_MODEL="claude-sonnet-4-6"
-
-source ~/.zshrc
-openclaw gateway restart
+source ~/.zshrc && openclaw gateway restart
 ```
 
 ### OpenClaw 安装
 
 ```bash
-# 使用 ClawHub 安装
 clawhub install cursor2api
 ```
 
-### 文档目录
+### 文档
 
-| 文档 | 说明 |
+| 文件 | 说明 |
 |------|------|
-| [SKILL.md](SKILL.md) | OpenClaw Skill 入口（含双语导航） |
+| [SKILL.md](SKILL.md) | OpenClaw Skill 入口 |
 | [references/installation.md](references/installation.md) | 完整安装指南 |
-| [references/token.md](references/token.md) | Token 获取与续期详解 |
+| [references/token.md](references/token.md) | Token 获取与续期 |
 | [references/configuration.md](references/configuration.md) | 环境配置参考 |
 | [references/quick-reference.md](references/quick-reference.md) | 速查表 |
 
-### ⚠️ 注意事项
+### ⚠️ 注意
 
-- **合规风险**：使用第三方代理可能违反 Cursor 服务条款，风险自担
-- **Token 过期**：Session Token 会过期，过期后需重新获取
-- **API 稳定性**：Cursor 内部 API 可能随时变化
+- **合规风险**：使用第三方代理可能违反 Cursor 服务条款
+- **Token 过期**：需定期刷新
+- **API 稳定性**：Cursor 内部 API 可能变化
 
 ---
 
-## 🇬🇧 English
+## 🇪🇸 Español
 
-### What is this?
+### ¿Qué es cursor2api?
 
-**cursor2api** is a proxy service that converts Cursor IDE's free AI conversations into standard Anthropic Messages API / OpenAI Chat Completions API format.
+**cursor2api** es un servicio proxy que convierte las conversaciones de IA de Cursor IDE al formato estándar Anthropic Messages API / OpenAI Chat Completions.
 
-Use it with [OpenClaw](https://github.com/openclaw/openclaw) or Claude Code to access Cursor's Claude models (e.g., Claude Sonnet 4) through your existing API-compatible tools.
+Úsalo con [OpenClaw](https://github.com/openclaw/openclaw) o Claude Code para acceder a los modelos Claude de Cursor (ej. Claude Sonnet 4).
 
-### Key Features
+### Características
 
-- 🌐 **Standard API Formats** — Supports both Anthropic Messages API and OpenAI Chat Completions
-- 🐳 **Docker Deployment** — One-command startup
-- 🔄 **Token Auto-Refresh** — Script to simplify token renewal
-- 📝 **Bilingual Docs** — English primary with Chinese toggle
+- 🌐 **API Estándar** — Anthropic Messages API + OpenAI Chat Completions
+- 🐳 **Docker** — Inicio con un comando
+- 🔄 **Auto-renovación de Token** — Scripts para simplificar la renovación
+- 📚 **Documentación Multilingüe**
 
-### Quick Start
+### Inicio Rápido
 
-#### 1. Get Your Token
+#### 1. Obtén tu Token
 
-1. Open [Cursor IDE](https://cursor.com) and log in
-2. Press `Cmd+Option+I` to open DevTools
-3. Go to **Application** → **Cookies** → `https://cursor.com`
-4. Copy the value of `WorkosCursorSessionToken`
+1. Abre [Cursor IDE](https://cursor.com) e inicia sesión
+2. Presiona `Cmd+Option+I` → **Application** → **Cookies** → `https://cursor.com`
+3. Copia el valor de `WorkosCursorSessionToken`
 
-#### 2. Start the Service
+#### 2. Inicia el Servicio
+
+```bash
+docker run -d \
+  --name cursor-api \
+  -p 3010:3000 \
+  -e WORKOS_CURSOR_SESSION_TOKEN=tu_token \
+  waitkafuka/cursor-api:latest
+```
+
+#### 3. Configura
+
+```bash
+export ANTHROPIC_BASE_URL="http://localhost:3010/v1"
+export ANTHROPIC_API_KEY="tu_token"
+export ANTHROPIC_DEFAULT_SONNET_MODEL="claude-sonnet-4-6"
+source ~/.zshrc && openclaw gateway restart
+```
+
+### Instalación
+
+```bash
+clawhub install cursor2api
+```
+
+---
+
+## 🇮🇳 हिन्दी
+
+### cursor2api क्या है?
+
+**cursor2api** एक प्रॉक्सी सेवा है जो Cursor IDE की AI बातचीत को मानक Anthropic Messages API / OpenAI Chat Completions API फॉर्मेट में बदलती है।
+
+[OpenClaw](https://github.com/openclaw/openclaw) या Claude Code के साथ उपयोग करें।
+
+### विशेषताएं
+
+- 🌐 **मानक API फॉर्मेट** — Anthropic + OpenAI समर्थन
+- 🐳 **Docker डिप्लॉयमेंट** — एक कमांड में शुरू
+- 🔄 **टोकन ऑटो-रिफ्रेश** — स्क्रिप्ट से आसान नवीनीकरण
+- 📚 **बहु-भाषी डॉक्यूमेंटेशन**
+
+### त्वरित शुरू
+
+#### 1. टोकन प्राप्त करें
+
+1. [Cursor IDE](https://cursor.com) खोलें और लॉगिन करें
+2. `Cmd+Option+I` दबाएं → **Application** → **Cookies** → `https://cursor.com`
+3. `WorkosCursorSessionToken` की वैल्यू कॉपी करें
+
+#### 2. सेवा शुरू करें
 
 ```bash
 docker run -d \
@@ -112,40 +223,118 @@ docker run -d \
   waitkafuka/cursor-api:latest
 ```
 
-#### 3. Configure Environment
+#### 3. कॉन्फ़िगर करें
 
 ```bash
-# Add to ~/.zshrc
 export ANTHROPIC_BASE_URL="http://localhost:3010/v1"
 export ANTHROPIC_API_KEY="your_token"
-export ANTHROPIC_DEFAULT_SONNET_MODEL="claude-sonnet-4-6"
-
-source ~/.zshrc
-openclaw gateway restart
+source ~/.zshrc && openclaw gateway restart
 ```
 
-### OpenClaw Installation
+### इंस्टॉल
 
 ```bash
-# Via ClawHub
 clawhub install cursor2api
 ```
 
-### Documentation
+---
 
-| File | Description |
-|------|-------------|
-| [SKILL.md](SKILL.md) | OpenClaw Skill entry point (bilingual) |
-| [references/installation.md](references/installation.md) | Full installation guide |
-| [references/token.md](references/token.md) | Token acquisition & refresh |
-| [references/configuration.md](references/configuration.md) | Environment configuration |
-| [references/quick-reference.md](references/quick-reference.md) | One-page cheat sheet |
+## 🇸🇦 العربية
 
-### ⚠️ Important Notes
+### ما هو cursor2api؟
 
-- **ToS Risk**: Using third-party proxies may violate Cursor's Terms of Service
-- **Token Expiry**: Session tokens expire; refresh when needed
-- **API Stability**: Cursor's internal API may change without notice
+**cursor2api** هو خدمة وسيطة تحوّل محادثات Cursor IDE إلى صيغة Anthropic Messages API / OpenAI Chat Completions القياسية.
+
+استخدمه مع [OpenClaw](https://github.com/openclaw/openclaw) أو Claude Code.
+
+### المميزات
+
+- 🌐 **صيغ API قياسية** — دعم Anthropic + OpenAI
+- 🐳 **Docker** — تشغيل بأمر واحد
+- 🔄 **تجديد التوكن التلقائي** — سكريبتات للتسهيل
+- 📚 **وثائق متعددة اللغات**
+
+### البدء السريع
+
+#### 1. احصل على التوكن
+
+1. افتح [Cursor IDE](https://cursor.com) وسجّل الدخول
+2. اضغط `Cmd+Option+I` → **Application** → **Cookies** → `https://cursor.com`
+3. انسخ قيمة `WorkosCursorSessionToken`
+
+#### 2. ابدأ الخدمة
+
+```bash
+docker run -d \
+  --name cursor-api \
+  -p 3010:3000 \
+  -e WORKOS_CURSOR_SESSION_TOKEN=your_token \
+  waitkafuka/cursor-api:latest
+```
+
+#### 3. اضبط الإعدادات
+
+```bash
+export ANTHROPIC_BASE_URL="http://localhost:3010/v1"
+export ANTHROPIC_API_KEY="your_token"
+source ~/.zshrc && openclaw gateway restart
+```
+
+### التثبيت
+
+```bash
+clawhub install cursor2api
+```
+
+---
+
+## 🇯🇵 日本語
+
+### cursor2api とは？
+
+**cursor2api** は、Cursor IDE の AI 対話を標準的な Anthropic Messages API / OpenAI Chat Completions API 形式に変換するプロキシサービス です。
+
+[OpenClaw](https://github.com/openclaw/openclaw) や Claude Code で使用し、Cursor の Claude モデルにアクセスできます。
+
+### 特徴
+
+- 🌐 **標準API形式** — Anthropic Messages API + OpenAI Chat Completions 対応
+- 🐳 **Docker対応** — ワンコマンドで起動
+- 🔄 **トークン自動更新** — スクリプトで更新を簡略化
+- 📚 **多言語ドキュメント** — 6言語対応
+
+### クイックスタート
+
+#### 1. トークンを取得
+
+1. [Cursor IDE](https://cursor.com) を開いてログイン
+2. `Cmd+Option+I` → **Application** → **Cookies** → `https://cursor.com`
+3. `WorkosCursorSessionToken` の値をコピー
+
+#### 2. サービスを起動
+
+```bash
+docker run -d \
+  --name cursor-api \
+  -p 3010:3000 \
+  -e WORKOS_CURSOR_SESSION_TOKEN=your_token \
+  waitkafuka/cursor-api:latest
+```
+
+#### 3. 環境設定
+
+```bash
+export ANTHROPIC_BASE_URL="http://localhost:3010/v1"
+export ANTHROPIC_API_KEY="your_token"
+export ANTHROPIC_DEFAULT_SONNET_MODEL="claude-sonnet-4-6"
+source ~/.zshrc && openclaw gateway restart
+```
+
+### インストール
+
+```bash
+clawhub install cursor2api
+```
 
 <!-- tabs:end -->
 
